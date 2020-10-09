@@ -31,6 +31,9 @@ class KanbanUserstoriesService extends taiga.Service
         @.statusHide = []
         @.foldStatusChanged = {}
         @.usByStatus = Immutable.Map()
+        @.usMap = Immutable.Map()
+        @.usByStatusSwimlanes = Immutable.Map()
+        @.swimlanesCounter = Immutable.Map()
 
     init: (project, usersById) ->
         @.project = project
@@ -190,14 +193,17 @@ class KanbanUserstoriesService extends taiga.Service
         return {"us_id": us.id, "order": -1}
 
     replace: (us) ->
-        @.usByStatus = @.usByStatus.map (status) ->
-            findedIndex = status.findIndex (usItem) ->
-                return usItem.get('id') == us.get('id')
+        @.usMap = @.usMap.set(us.get('id'), us)
+        # @.usByStatus = @.usByStatus.map (status) ->
+        #     findedIndex = status.findIndex (usItem) ->
+        #         return usItem.get('id') == us.get('id')
 
-            if findedIndex != -1
-                status = status.set(findedIndex, us)
+        #     if findedIndex != -1
+        #         status = status.set(findedIndex, us)
 
-            return status
+        #     return status
+
+        # @.refreshSwimlanes()
 
     replaceModel: (us) ->
         @.userstoriesRaw = _.map @.userstoriesRaw, (usItem) ->
@@ -209,27 +215,32 @@ class KanbanUserstoriesService extends taiga.Service
         @.refresh()
 
     getUs: (id) ->
-        findedUs = null
+        # findedUs = null
 
-        @.usByStatus.forEach (status) ->
-            findedUs = status.find (us) -> return us.get('id') == id
+        # @.usByStatus.forEach (status) ->
+        #     findedUs = status.find (us) -> return us.get('id') == id
 
-            return false if findedUs
+        #     return false if findedUs
 
-        return findedUs
+        # return findedUs
+        return @.usMap.get(id)
 
     getUsModel: (id) ->
         return _.find @.userstoriesRaw, (us) -> return us.id == id
 
     refreshUserStory: (usId) ->
         usModel = @.getUsModel(usId)
-        collection =  @.usByStatus.toJS()
-
-        index = _.findIndex(collection[usModel.status], (x) => x.id == usId)
         us = @.retrieveUserStoryData(usModel)
-        collection[usModel.status][index] = us
 
-        @.usByStatus = Immutable.fromJS(collection)
+        # collection =  @.usByStatus.toJS()
+
+        # index = _.findIndex(collection[usModel.status], (x) => x.id == usId)
+        # us = @.retrieveUserStoryData(usModel)
+        # collection[usModel.status][index] = us
+
+        # @.usByStatus = Immutable.fromJS(collection)
+        @.usMap = @.usMap.set(usId, Immutable.fromJS(us))
+        # @.refreshSwimlanes()
 
     retrieveUserStoryData: (usModel) ->
         us = {}
@@ -262,11 +273,34 @@ class KanbanUserstoriesService extends taiga.Service
 
         for key, usModel of @.userstoriesRaw
             us = @.retrieveUserStoryData(usModel)
-            if (!collection[us.model.status])
-                collection[us.model.status] = []
+            if (!collection[usModel.status])
+                collection[usModel.status] = []
 
-            collection[us.model.status].push(us)
+            collection[usModel.status].push(usModel.id)
+            @.usMap = @.usMap.set(usModel.id, Immutable.fromJS(us))
 
         @.usByStatus = Immutable.fromJS(collection)
+        # @.refreshSwimlanes()
+
+    refreshSwimlanes: () ->
+        swimlanes = [0, 1, 2]
+        @.usByStatusSwimlanes = Immutable.Map()
+
+        swimlanes.forEach (swimlane) =>
+            swimlaneUsByStatus = Immutable.Map()
+            swimlaneCount = 0
+            @.usByStatus.forEach (usList, statusId) =>
+                usListSwimlanes = usList.filter (us) =>
+                    return us.getIn(['model', 'swimlane']) == swimlane
+                swimlaneUsByStatus = swimlaneUsByStatus.set(statusId, usListSwimlanes)
+                swimlaneCount += usListSwimlanes.size
+
+            @.usByStatusSwimlanes = @.usByStatusSwimlanes.set(swimlane, swimlaneUsByStatus)
+
+            @.swimlanesCounter = @.swimlanesCounter.set(swimlane, swimlaneCount)
+
+        # console.log @.usByStatusSwimlanes.toJS()
+        # console.log @.swimlanesCounter.toJS()
+        # @.usByStatusSwimlanes
 
 angular.module("taigaKanban").service("tgKanbanUserstories", KanbanUserstoriesService)

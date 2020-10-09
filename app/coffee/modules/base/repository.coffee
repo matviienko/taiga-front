@@ -151,6 +151,15 @@ class RepositoryService extends taiga.Service
             httpOptions.headers["x-disable-pagination"] =  "1"
 
         return @http.get(url, params, httpOptions).then (data) =>
+            # fake swimlanes
+            if  name == 'userstories'
+                numSimlanes = 5
+
+                data.data.forEach (us) ->
+                    swimlane = Math.floor(Math.random() * numSimlanes)
+                    us.swimlane = swimlane
+            # end fake swimlanes
+
             result =  _.map(data.data, (x) => @model.make_model(name, x))
 
             if headers

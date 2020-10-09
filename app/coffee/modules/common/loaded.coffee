@@ -14,29 +14,15 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
-# File: components/card/card.directive.coffee
+# File: modules/common/bind-scope.coffee
 ###
 
-module = angular.module("taigaComponents")
+module = angular.module("taigaCommon")
 
-cardDirective = () ->
-    return {
-        controller: "Card",
-        controllerAs: "vm",
-        templateUrl: "components/card/card.html",
-        bindToController: {
-            onToggleFold: "&",
-            onClickAssignedTo: "&",
-            onClickEdit: "&",
-            onClickRemove: "&",
-            onClickDelete: "&",
-            project: "<",
-            item: "<",
-            zoom: "<",
-            zoomLevel: "<",
-            archived: "<",
-            type: "@"
-        }
-    }
+Loaded = (config) ->
+    link = ($scope, $el) ->
+        scope.$watch attrs.tgLoaded, (newValue, oldValue) -> newValue()
 
-module.directive('tgCard', cardDirective)
+    return {link: link}
+
+module.directive("tgLoaded", [Loaded])

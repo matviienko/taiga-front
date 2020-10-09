@@ -7,8 +7,8 @@
     div(ng-if="vm.zoomLevel > 0")
         include card-templates/card-epics
     include card-templates/card-title
-    include card-templates/card-assigned-to
-    include card-templates/card-data
+    tg-card-assigned-to(item="vm.item" vm="vm")
+    tg-card-data(item="vm.item" vm="vm")
     tg-card-slideshow(
         ng-if="vm.isSlideshowVisible()"
         tg-check-permission="view_tasks"

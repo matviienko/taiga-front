@@ -67,6 +67,7 @@ Loader = ($rootscope) ->
                 $rootscope.$broadcast("loader:end")
                 open = false
                 window.prerenderReady = true # Needed by Prerender Server
+                console.timeEnd()
 
         startLoadTime = 0
         requestCount = 0
@@ -81,6 +82,7 @@ Loader = ($rootscope) ->
         ), 50
 
     start = () ->
+        console.time()
         startLoadTime = new Date().getTime()
         $rootscope.$broadcast("loader:start")
         open = true
