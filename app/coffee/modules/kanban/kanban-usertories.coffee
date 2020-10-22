@@ -33,7 +33,6 @@ class KanbanUserstoriesService extends taiga.Service
         @.usByStatus = Immutable.Map()
         @.usMap = Immutable.Map()
         @.usByStatusSwimlanes = Immutable.Map()
-        @.swimlanesCounter = Immutable.Map()
 
     init: (project, usersById) ->
         @.project = project
@@ -203,7 +202,7 @@ class KanbanUserstoriesService extends taiga.Service
 
         #     return status
 
-        # @.refreshSwimlanes()
+        @.refreshSwimlanes()
 
     replaceModel: (us) ->
         @.userstoriesRaw = _.map @.userstoriesRaw, (usItem) ->
@@ -240,7 +239,7 @@ class KanbanUserstoriesService extends taiga.Service
 
         # @.usByStatus = Immutable.fromJS(collection)
         @.usMap = @.usMap.set(usId, Immutable.fromJS(us))
-        # @.refreshSwimlanes()
+        @.refreshSwimlanes()
 
     retrieveUserStoryData: (usModel) ->
         us = {}
@@ -280,27 +279,22 @@ class KanbanUserstoriesService extends taiga.Service
             @.usMap = @.usMap.set(usModel.id, Immutable.fromJS(us))
 
         @.usByStatus = Immutable.fromJS(collection)
-        # @.refreshSwimlanes()
+        @.refreshSwimlanes()
 
     refreshSwimlanes: () ->
-        swimlanes = [0, 1, 2]
         @.usByStatusSwimlanes = Immutable.Map()
 
-        swimlanes.forEach (swimlane) =>
+        @.project.swimlanes.forEach (swimlane) =>
             swimlaneUsByStatus = Immutable.Map()
-            swimlaneCount = 0
+
             @.usByStatus.forEach (usList, statusId) =>
-                usListSwimlanes = usList.filter (us) =>
-                    return us.getIn(['model', 'swimlane']) == swimlane
-                swimlaneUsByStatus = swimlaneUsByStatus.set(statusId, usListSwimlanes)
-                swimlaneCount += usListSwimlanes.size
+                usListSwimlanes = usList.filter (usId) =>
+                    us = @.usMap.get(usId)
+                    return us.getIn(['model', 'swimlane']) == swimlane.id
+                swimlaneUsByStatus = swimlaneUsByStatus.set(Number(statusId), usListSwimlanes)
 
-            @.usByStatusSwimlanes = @.usByStatusSwimlanes.set(swimlane, swimlaneUsByStatus)
+            @.usByStatusSwimlanes = @.usByStatusSwimlanes.set(swimlane.id, swimlaneUsByStatus)
 
-            @.swimlanesCounter = @.swimlanesCounter.set(swimlane, swimlaneCount)
-
-        # console.log @.usByStatusSwimlanes.toJS()
-        # console.log @.swimlanesCounter.toJS()
-        # @.usByStatusSwimlanes
+        # console.log '@.usByStatusSwimlanes', @.usByStatusSwimlanes.toJS()
 
 angular.module("taigaKanban").service("tgKanbanUserstories", KanbanUserstoriesService)

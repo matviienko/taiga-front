@@ -65,7 +65,7 @@ div.kanban-table.kanban-table-swimlane(
                     )
                         tg-svg(svg-icon="icon-unfold-column")
     div(
-        ng-repeat="swimline in swimlinesList"
+        ng-repeat="swimline in project.swimlanes"
         data-swimline="{{swimline.id}}"
         class="kanban-swimline"
     )
@@ -98,7 +98,7 @@ div.kanban-table.kanban-table-swimlane(
                 )
                     //- div(ng-if="statusColumnVisibility[swimline.id + '-' + s.id]")
                     div
-                        .kanban-task-counter 100 {{ swimlanesCounter.get(swimline.id) }}
+                        .kanban-task-counter(ng-attr-title="{{'KANBAN.NUMBER_US' | translate}}") {{ usByStatusSwimlanes.getIn([swimline.id, s.id]).size }}
                         .placeholder-collapsed
                             .placeholder-collapsed-wrapper
                                 div.ammount(ng-if="!s.is_archived")  {{ usByStatus.get(s.id.toString()).size || 0 }}
@@ -116,7 +116,7 @@ div.kanban-table.kanban-table-swimlane(
                         )
 
                         tg-card.card.ng-animate-disabled(
-                            tg-repeat="usId in usByStatus.get(s.id.toString())",
+                            tg-repeat="usId in usByStatusSwimlanes.getIn([swimline.id, s.id])",
                             ng-class="{'kanban-task-maximized': ctrl.isMaximized(s.id), 'kanban-task-minimized': ctrl.isMinimized(s.id), 'kanban-task-selected': ctrl.selectedUss[usId], 'ui-multisortable-multiple': ctrl.selectedUss[usId]}"
                             tg-class-permission="{'readonly': '!modify_task'}"
                             tg-bind-scope,

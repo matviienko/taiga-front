@@ -89,11 +89,8 @@ class KanbanController extends mixOf(taiga.Controller, taiga.PageMixin, taiga.Fi
         taiga.defineImmutableProperty @.scope, "usMap", () =>
             return @kanbanUserstoriesService.usMap
 
-        # taiga.defineImmutableProperty @.scope, "usByStatusSwimlanes", () =>
-        #     return @kanbanUserstoriesService.usByStatusSwimlanes
-
-        taiga.defineImmutableProperty @.scope, "swimlanesCounter", () =>
-            return @kanbanUserstoriesService.swimlanesCounter
+        taiga.defineImmutableProperty @.scope, "usByStatusSwimlanes", () =>
+            return @kanbanUserstoriesService.usByStatusSwimlanes
 
         @rootscope.$watch () ->
             console.log('Rootscope')
@@ -293,7 +290,6 @@ class KanbanController extends mixOf(taiga.Controller, taiga.PageMixin, taiga.Fi
     ###
     renderUserStories: (userstories) =>
         userstories = _.sortBy(userstories, 'kanban_order')
-
         # only 3 per status
         # statusCount = {};
         # userstories = userstories.filter (us) =>
@@ -346,7 +342,6 @@ class KanbanController extends mixOf(taiga.Controller, taiga.PageMixin, taiga.Fi
             @kanbanUserstoriesService.init(@scope.project, @scope.usersById)
             @tgLoader.pageLoaded()
             @.renderUserStories(userstories)
-
 
             return userstories
 
@@ -406,53 +401,6 @@ class KanbanController extends mixOf(taiga.Controller, taiga.PageMixin, taiga.Fi
         @scope.pointsById = groupBy(project.points, (x) -> x.id)
         @scope.usStatusById = groupBy(project.us_statuses, (x) -> x.id)
         @scope.usStatusList = _.sortBy(project.us_statuses, "order")
-        # Fake
-        @scope.swimlinesList = [
-            {id: 0, name: 'Main'},
-            {id: 1, name: 'Test 1'},
-            {id: 2, name: 'Test 2'},
-            {id: 3, name: 'Test 3'},
-            {id: 4, name: 'Test 4'},
-            {id: 5, name: 'Test 5'},
-            {id: 6, name: 'Test 6'},
-            {id: 7, name: 'Test 7'},
-            {id: 8, name: 'Test 8'},
-            {id: 9, name: 'Main'},
-            {id: 10, name: 'Test 1'},
-            {id: 11, name: 'Test 2'},
-            {id: 12, name: 'Test 3'},
-            {id: 13, name: 'Test 4'},
-            {id: 14, name: 'Test 5'},
-            {id: 15, name: 'Test 6'},
-            {id: 16, name: 'Test 7'},
-            {id: 17, name: 'Test 8'},
-            # {id: 18, name: 'Main'},
-            # {id: 19, name: 'Test 1'},
-            # {id: 20, name: 'Test 2'},
-            # {id: 21, name: 'Test 3'},
-            # {id: 22, name: 'Test 4'},
-            # {id: 23, name: 'Test 5'},
-            # {id: 24, name: 'Test 6'},
-            # {id: 25, name: 'Test 7'},
-            # {id: 26, name: 'Test 8'},
-            # {id: 27, name: 'Test 1'},
-            # {id: 28, name: 'Test 2'},
-            # {id: 29, name: 'Test 3'},
-            # {id: 30, name: 'Test 4'},
-            # {id: 31, name: 'Test 5'},
-            # {id: 32, name: 'Test 6'},
-            # {id: 33, name: 'Test 7'},
-            # {id: 34, name: 'Test 8'},
-            # {id: 35, name: 'Main'},
-            # {id: 36, name: 'Test 1'},
-            # {id: 37, name: 'Test 2'},
-            # {id: 38, name: 'Test 3'},
-            # {id: 38, name: 'Test 4'},
-            # {id: 40, name: 'Test 5'},
-            # {id: 41, name: 'Test 6'},
-            # {id: 42, name: 'Test 7'},
-            # {id: 43, name: 'Test 8'},
-        ]
         @scope.swimlineVisibility = {}
         @scope.statusColumnVisibility = {}
 
