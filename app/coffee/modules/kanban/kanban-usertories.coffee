@@ -279,6 +279,7 @@ class KanbanUserstoriesService extends taiga.Service
             @.usMap = @.usMap.set(usModel.id, Immutable.fromJS(us))
 
         @.usByStatus = Immutable.fromJS(collection)
+        console.log @.usByStatus.toJS()
         @.refreshSwimlanes()
 
     refreshSwimlanes: () ->
