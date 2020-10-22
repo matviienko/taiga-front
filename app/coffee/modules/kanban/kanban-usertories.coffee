@@ -282,6 +282,9 @@ class KanbanUserstoriesService extends taiga.Service
         @.refreshSwimlanes()
 
     refreshSwimlanes: () ->
+        if !@.project.swimlanes
+            return
+
         @.usByStatusSwimlanes = Immutable.Map()
 
         @.project.swimlanes.forEach (swimlane) =>
