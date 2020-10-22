@@ -297,7 +297,7 @@ $fold-animation-duration: .1s;
         display: flex;
         flex-direction: row-reverse;
         left: 0;
-        min-height: 300px;
+        min-height: 217px;
         padding: 1rem 0;
         position: absolute;
         text-transform: uppercase;
@@ -340,6 +340,10 @@ $fold-animation-duration: .1s;
 .vfold {
     .placeholder-collapsed {
         display: flex;
+    }
+
+    .kanban-task-counter {
+        display: none;
     }
 }
 
@@ -429,6 +433,9 @@ $fold-animation-duration: .1s;
 }
 
 .kanban-swimlane {
+    display: flex;
+    flex-direction: column;
+
     .card:first-child {
         margin-top: 0;
     }
