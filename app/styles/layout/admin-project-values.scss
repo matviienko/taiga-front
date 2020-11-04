@@ -182,3 +182,42 @@
         }
     }
 }
+
+.admin-wip-manager {
+    $swimlanes-width: 500px;
+    margin-block-start: 1.5rem;
+    padding-inline-start: 1rem;
+
+    .admin-wip-list {
+        position: relative;
+        width: 500px;
+    }
+
+    .admin-wip-input {
+        @include font-type(regular);
+        align-items: center;
+        background: $color-gray100;
+        border-radius: 3px;
+        color: $color-black600;
+        display: flex;
+        justify-content: space-between;
+        padding: .75rem 1rem;
+
+        span {
+            flex-grow: 1;
+            width: 100%;
+        }
+
+        input {
+            background: none;
+            border: 0;
+            padding-right: 0;
+            text-align: end;
+            width: auto;
+        }
+
+        &:hover {
+            cursor: grab;
+        }
+    }
+}
