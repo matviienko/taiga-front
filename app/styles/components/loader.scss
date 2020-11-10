@@ -9,7 +9,7 @@
     right: 0;
     top: 0;
     width: 100%;
-    z-index: $first-layer;
+    z-index: $negative-layer;
     .container {
         align-items: center;
         display: flex;
