@@ -16,6 +16,8 @@ services:
     ports:
       # - "${TAIGA_UI_PORT:-8080}:80/tcp"
       - "${TAIGA_UI_PORT:-8080}:9001/tcp"
+      # live reload port
+      - "35729:35729/tcp"
       # - 443:443 # To enable SSL, uncomment this line
     volumes:
       - ./:/tmp/taiga-front-dist
@@ -25,7 +27,7 @@ services:
       - ./docker/conf/nginx/taiga.conf:/etc/nginx/conf.d/default.conf
       - ./docker/conf/nginx/ssl.conf:/etc/nginx/ssl.conf
       - ./docker/conf/nginx/taiga-events.conf:/etc/nginx/taiga-events.conf
-      - ./docker/docker-entrypoint.sh:/docker-entrypoint.sh
+      # - ./docker/docker-entrypoint.sh:/docker-entrypoint.sh
       - /tmp/taiga-front-dist/node_modules/
       - /tmp/taiga-front-dist/dist/
       - /tmp/taiga-front-dist/conf/

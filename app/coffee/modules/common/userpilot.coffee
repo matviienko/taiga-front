@@ -117,25 +117,25 @@ class UserPilotService extends taiga.Service
     setZendeskWidgetStatus: (config={enabled: false}) ->
         supress = !config.enabled
 
-        @win.zE('webWidget', 'updateSettings', {
-            webWidget: {
-                chat: {
-                    suppress: supress
-                },
-                contactForm: {
-                    suppress: supress
-                },
-                helpCenter: {
-                    suppress: supress
-                },
-                talk: {
-                    suppress: supress
-                },
-                answerBot: {
-                    suppress: supress
-                }
-            }
-        });
+        # @win.zE('webWidget', 'updateSettings', {
+        #     webWidget: {
+        #         chat: {
+        #             suppress: supress
+        #         },
+        #         contactForm: {
+        #             suppress: supress
+        #         },
+        #         helpCenter: {
+        #             suppress: supress
+        #         },
+        #         talk: {
+        #             suppress: supress
+        #         },
+        #         answerBot: {
+        #             suppress: supress
+        #         }
+        #     }
+        # });
 
 
 module.service("$tgUserPilot", UserPilotService)

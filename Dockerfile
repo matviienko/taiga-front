@@ -56,6 +56,7 @@ COPY docker/conf/nginx/taiga.conf /etc/nginx/conf.d/default.conf
 COPY docker/conf/nginx/ssl.conf /etc/nginx/ssl.conf
 COPY docker/conf/nginx/taiga-events.conf /etc/nginx/taiga-events.conf
 COPY docker/docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
 ###
 WORKDIR /tmp/taiga-front-dist
 RUN npm install
