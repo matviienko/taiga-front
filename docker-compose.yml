@@ -1,0 +1,51 @@
+version: '2'
+services:
+  taiga-front:
+    env_file: .env
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        TAIGA_SCRIPT_REPOSITORY: "https://${GITHUB_PERSONAL_TOKEN}@${TAIGA_SCRIPT_REPOSITORY:-github.com/matviienko/taiga-scripts.git}"
+        TAIGA_BACK_REPOSITORY: "https://${GITHUB_PERSONAL_TOKEN}@${TAIGA_BACK_REPOSITORY:-github.com/matviienko/taiga-back.git}"
+        TAIGA_BACK_BRANCH: ${TAIGA_BACK_BRANCH:-stable}
+        TAIGA_FRONT_REPOSITORY: "https://${GITHUB_PERSONAL_TOKEN}@${TAIGA_FRONT_REPOSITORY:-github.com/matviienko/taiga-front.git}"
+        TAIGA_FRONT_BRANCH: ${TAIGA_FRONT_BRANCH:-stable}
+        # TAIGA_FRONT_DIST_REPOSITORY: "https://${GITHUB_PERSONAL_TOKEN}@${TAIGA_FRONT_DIST_REPOSITORY:-github.com/matviienko/taiga-front-dist.git}"
+        # TAIGA_FRONT_DIST_BRANCH: "stable"
+    ports:
+      # - "${TAIGA_UI_PORT:-8080}:80/tcp"
+      - "${TAIGA_UI_PORT:-8080}:9001/tcp"
+      # - 443:443 # To enable SSL, uncomment this line
+    volumes:
+      - ./:/tmp/taiga-front-dist
+      # - ./docker/conf/taiga/conf.json:/taiga/conf.json
+      - ./docker/conf/locale.gen:/etc/locale.gen
+      - ./docker/conf/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./docker/conf/nginx/taiga.conf:/etc/nginx/conf.d/default.conf
+      - ./docker/conf/nginx/ssl.conf:/etc/nginx/ssl.conf
+      - ./docker/conf/nginx/taiga-events.conf:/etc/nginx/taiga-events.conf
+      - ./docker/docker-entrypoint.sh:/docker-entrypoint.sh
+      - /tmp/taiga-front-dist/node_modules/
+      - /tmp/taiga-front-dist/dist/
+      - /tmp/taiga-front-dist/conf/
+    environment:
+      TAIGA_HOSTNAME: ${TAIGA_BASEURL:-localhost}
+      TAIGA_FRONT_HOSTNAME: ${TAIGA_FRONT_HOSTNAME}
+      TAIGA_SLEEP: ${TAIGA_SLEEP:-15}
+      TAIGA_SSL: ${TAIGA_SSL:-False}
+      TAIGA_SSL_BY_REVERSE_PROXY: ${TAIGA_SSL_BY_REVERSE_PROXY:-False}
+      TAIGA_ENABLE_EMAIL: ${TAIGA_ENABLE_EMAIL:-False}
+      TAIGA_SECRET_KEY: ${TAIGA_SECRET_KEY:-!!!REPLACE-ME-j1598u1J^U*(y251u98u51u5981urf98u2o5uvoiiuzhlit3)!!!}
+
+      # TAIGA_SSL: True # To enable SSL, uncomment this line
+      # TAIGA_SSL_BY_REVERSE_PROXY: True # To enable SSL, handling by a reverse proxy, uncomment this
+
+      # To use an external SMTP for emails, fill in these values:
+      # TAIGA_ENABLE_EMAIL: True
+      # TAIGA_EMAIL_FROM: no-reply@taiga.mycompany.net
+      # TAIGA_EMAIL_USE_TLS: True
+      # TAIGA_EMAIL_HOST: smtp.google.com
+      # TAIGA_EMAIL_PORT: 587
+      # TAIGA_EMAIL_USER: me@gmail.com
+      # TAIGA_EMAIL_PASS: super-secure-pass phrase thing!
