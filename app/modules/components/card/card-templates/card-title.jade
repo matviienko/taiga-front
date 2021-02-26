@@ -6,10 +6,46 @@ h2.card-title()
         tg-nav-get-params="{\"kanban-status\": {{vm.item.getIn(['model', 'status'])}}}"
         title="#{{ ::vm.item.getIn(['model', 'ref']) }} {{ vm.item.getIn(['model', 'subject'])}}"
     )
-        span(ng-if="vm.visible('ref')") {{::"#" + vm.item.getIn(['model', 'ref'])}}
+        //- span(ng-if="vm.visible('ref')") {{::"#" + vm.item.getIn(['model', 'ref'])}}
         span.e2e-title(ng-if="vm.visible('subject')", ng-bind-html="vm.item.getIn(['model', 'subject']) | emojify")
         tg-belong-to-epics(
             format="pill"
             ng-if="vm.item.getIn(['model', 'epics'])"
             epics="vm.item.getIn(['model', 'epics'])"
         )
+    
+    .card-owner-actions(
+        ng-if="vm.visible('owner')"
+        tg-check-permission="{{vm.getModifyPermisionKey()}}"
+    )
+        //- a.e2e-assign.card-owner-assign(
+        //-     ng-click="!$event.ctrlKey && !$event.metaKey && vm.onClickAssignedTo({id: vm.item.get('id')})"
+        //-     href=""
+        //-   )
+        //-     tg-svg(svg-icon="icon-add-user")
+        //-     span(translate="COMMON.CARD.ASSIGN_TO")
+
+        div.card-actions
+            a.e2e-edit.card-edit(
+                href=""
+                ng-click="!$event.ctrlKey && !$event.metaKey && vm.onClickEdit({id: vm.item.get('id')})"
+                tg-loading="vm.item.get('loading-edit')"
+                title="{{ 'COMMON.CARD.EDIT' | translate }}"
+            )
+                tg-svg(svg-icon="icon-edit", svg-title="{{ 'COMMON.CARD.EDIT' | translate }}")
+            a.e2e-edit.card-edit(
+                href=""
+                ng-if="vm.item.get('modelName') == 'issues'"
+                ng-click="!$event.ctrlKey && !$event.metaKey && vm.onClickRemove({id: vm.item.get('id')})"
+                tg-loading="vm.item.get('loading-remove-from-sprint')"
+                title="{{ 'COMMON.CARD.DETACH_ISSUE_FROM_SPRINT' | translate }}"
+            )
+                tg-svg(svg-icon="icon-close", svg-title="{{ 'COMMON.CARD.DETACH_ISSUE_FROM_SPRINT' | translate }}")
+            a.e2e-edit.card-delete(
+                href=""
+                ng-click="!$event.ctrlKey && !$event.metaKey && vm.onClickDelete({id: vm.item.get('id')})"
+                tg-loading="vm.item.get('loading-delete')"
+                ng-attr-title="{{ vm.item.get('modelName') == 'issues' ? 'COMMON.CARD.DELETE_ISSUE' : 'COMMON.CARD.DELETE' | translate }}"
+                tg-check-permission="{{vm.getDeletePermisionKey()}}"
+            )
+                tg-svg(svg-icon="icon-trash", svg-title="{{ vm.item.get('modelName') == 'issues' ? 'COMMON.CARD.DELETE_ISSUE' : 'COMMON.CARD.DELETE' | translate }}")

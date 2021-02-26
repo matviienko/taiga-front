@@ -1,4 +1,6 @@
 .card {
+    border: 1px solid #E8E8E8;
+    border-radius: .35rem;
     box-shadow: 2px 2px 4px darken($whitish, 10%);
     cursor: move;
     display: block;
@@ -17,7 +19,7 @@
 
 .card-inner {
     background: $white;
-    border-radius: .25rem;
+    border-radius: .35rem;
 
     .belong-to-epic-pill-wrapper {
         padding: 0;
@@ -150,12 +152,14 @@
     background: rgba($white, .9);
     display: flex;
     justify-content: space-between;
-    left: 0;
+    // left: 0;
+    right: 0;
     opacity: 0;
     position: absolute;
     top: 0;
     transition: all .2s;
-    width: 100%;
+    // width: 100%;
+    width: 87px;
     &:hover {
         color: $primary-light;
         svg {
@@ -180,17 +184,24 @@
         align-items: center;
         cursor: pointer;
         display: flex;
-        padding: .6rem .5rem;
+        padding: .9rem .5rem;
     }
 }
 
 .card-title {
-    @include font-size(normal);
+    // @include font-size(normal);
+    @include font-size(small);
     line-height: 1.25;
     margin-bottom: 0;
     padding: 1rem .75rem;
+    position: relative;
     span {
         padding-right: .25rem;
+    }
+    &:hover {
+        .card-owner-actions {
+            opacity: 1;
+        }
     }
 }
 
@@ -208,6 +219,23 @@
     }
     .card-estimation.not-estimated {
         font-size: .8125rem;
+    }
+    .card-owner-info {
+        align-items: center;
+        display: flex;
+        &.multiple .card-owner-avatar img {
+            margin-right: .45rem;
+        }
+    }
+    .card-owner-avatar {
+        line-height: 0;
+        position: relative;
+    }
+    img {
+        flex-shrink: 0;
+        height: 1.5rem;
+        margin-left: .5rem;
+        width: 1.5rem;
     }
 }
 

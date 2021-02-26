@@ -2,21 +2,23 @@
     ng-if="vm.visible('extra_info')"
     ng-class="{'empty-tasks': !vm.item.getIn(['model', 'tasks']).size}"
 )
-    span(ng-switch="vm.item.get('modelName') == 'issues'")
-        span(ng-switch-when="true")
-            span.card-status-tag(
-                ng-if="vm.item.get('status')"
-                ng-style="{color: vm.item.getIn(['status', 'color'])}"
-            ) {{ vm.item.getIn(['status', 'name']) }}
-        span(ng-switch-when="false")
-            span.card-estimation.not-estimated(
-                ng-if="vm.item.getIn(['model', 'total_points']) === null && vm.visible('empty_extra_info')",
-                translate="US.NOT_ESTIMATED"
-            )
-            span.card-estimation(
-                data-id="{{ vm.item.getIn(['model', 'id']) }}"
-                ng-if="vm.item.getIn(['model', 'total_points'])"
-            ) {{"COMMON.FIELDS.POINTS" | translate}} {{vm.item.getIn(['model', 'total_points'])}}
+    //- span(ng-switch="vm.item.get('modelName') == 'issues'")
+    //-     span(ng-switch-when="true")
+    //-         span.card-status-tag(
+    //-             ng-if="vm.item.get('status')"
+    //-             ng-style="{color: vm.item.getIn(['status', 'color'])}"
+    //-         ) {{ vm.item.getIn(['status', 'name']) }}
+    //-     span(ng-switch-when="false")
+    //-         span.card-estimation.not-estimated(
+    //-             ng-if="vm.item.getIn(['model', 'total_points']) === null && vm.visible('empty_extra_info')",
+    //-             translate="US.NOT_ESTIMATED"
+    //-         )
+    //-         span.card-estimation(
+    //-             data-id="{{ vm.item.getIn(['model', 'id']) }}"
+    //-             ng-if="vm.item.getIn(['model', 'total_points'])"
+    //-         ) {{"COMMON.FIELDS.POINTS" | translate}} {{vm.item.getIn(['model', 'total_points'])}}
+
+    span(ng-if="vm.visible('ref')") {{::"#" + vm.item.getIn(['model', 'ref'])}}
 
     .card-statistics
         tg-due-date.statistic.card-due-date(
@@ -46,3 +48,17 @@
         .statistic.card-attachments(ng-if="vm.item.getIn(['model', 'total_attachments']) || vm.visible('empty_extra_info')")
            tg-svg(svg-icon="icon-attachment")
            span {{vm.item.getIn(['model', 'total_attachments'])}}
+
+    .card-owner-info(ng-if="vm.item.get('assigned_to') && (!vm.hasMultipleAssignedUsers() || !vm.visible('owner'))")
+        .card-owner-avatar
+            img(
+                ng-class="{'is-iocaine': vm.item.getIn(['model', 'is_iocaine'])}"
+                tg-avatar="vm.item.get('assigned_to')"
+            )
+        div(ng-if="!vm.visible('owner')")
+            include card-title
+
+    .card-owner-info(ng-if="!vm.item.get('assigned_to')")
+        img(ng-src="/#{v}/images/unnamed.png")
+        div(ng-if="!vm.visible('owner')")
+            include card-title

@@ -15,7 +15,7 @@ services:
         # TAIGA_FRONT_DIST_BRANCH: "stable"
     ports:
       # - "${TAIGA_UI_PORT:-8080}:80/tcp"
-      - "${TAIGA_UI_PORT:-8080}:9001/tcp"
+      - "${TAIGA_UI_PORT:-80}:9001/tcp"
       # live reload port
       - "35729:35729/tcp"
       # - 443:443 # To enable SSL, uncomment this line
@@ -32,7 +32,7 @@ services:
       - /tmp/taiga-front-dist/dist/
       - /tmp/taiga-front-dist/conf/
     environment:
-      TAIGA_HOSTNAME: ${TAIGA_BASEURL:-localhost}
+      TAIGA_HOSTNAME: ${TAIGA_BASEURL:-localhost:8080}
       TAIGA_FRONT_HOSTNAME: ${TAIGA_FRONT_HOSTNAME}
       TAIGA_SLEEP: ${TAIGA_SLEEP:-15}
       TAIGA_SSL: ${TAIGA_SSL:-False}
